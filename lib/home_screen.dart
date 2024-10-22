@@ -8,6 +8,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
+  final List<Widget> _pages = [
+    SearchPage(),
+    ReviewPage(), // 차량 리뷰 게시글 페이지
+    WishListPage(),
+    NoticePage(),
+    ProfilePage(),
+  ];
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -27,59 +35,29 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search for vehicles...',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-            ),
-          ),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 3,
-              children: [
-                _buildCategoryButton('Category', Icons.category),
-                _buildCategoryButton('Classes', Icons.video_library),
-                _buildCategoryButton('Free Course', Icons.school),
-                _buildCategoryButton('BookStore', Icons.book),
-                _buildCategoryButton('Live Course', Icons.live_tv),
-                _buildCategoryButton('LeaderBoard', Icons.emoji_events),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.lightBlue,
+        unselectedItemColor: Colors.grey[300],
+        backgroundColor: Colors.white,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        backgroundColor: Colors.purple,  // 네비게이션 바의 배경색을 변경
-        selectedItemColor: Colors.lightBlue, // 선택된 아이템의 색상
-        unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
-        items: [
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.search),
+            label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.camera_alt),
-            label: 'Camera',
+            icon: Icon(Icons.comment),
+            label: 'Review',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'Wish',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
+            icon: Icon(Icons.campaign),
             label: 'Notice',
           ),
           BottomNavigationBarItem(
@@ -90,19 +68,94 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
 
-  Widget _buildCategoryButton(String label, IconData icon) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          backgroundColor: Colors.blueAccent,
-          radius: 30.0,
-          child: Icon(icon, size: 30.0, color: Colors.white),
+class ReviewPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // 차량 리뷰 게시글을 리스트로 표시 (예시)
+    return ListView(
+      padding: EdgeInsets.all(10.0),
+      children: <Widget>[
+        PostCard(
+          imageUrl: 'https://www.genesis.com/content/dam/genesis-p2/kr/assets/models/g80/24fl/color/genesis-kr-g80-facelift-standard-color-matte-makalu-gray-small.png',
+          userName: 'User1',
+          review: '이 차는 정말 훌륭해요!',
+          carModel: "제네시스 G80",
         ),
-        SizedBox(height: 8.0),
-        Text(label),
+        PostCard(
+          imageUrl: 'https://autoimg.danawa.com/photo/4455/51887/lineup_360.png',
+          userName: 'User2',
+          review: '연비가 좋고 디자인이 예뻐요.',
+          carModel: "현대 더 뉴 아반떼",
+        ),
+        // 더 많은 게시글 추가
       ],
     );
+  }
+}
+
+class PostCard extends StatelessWidget {
+  final String imageUrl;
+  final String userName;
+  final String review;
+  final String carModel;
+
+  PostCard({required this.imageUrl, required this.userName, required this.review, required this.carModel,});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.network(imageUrl),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              userName,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text('차종: $carModel', style: TextStyle(fontSize: 16, color: Colors.grey)), // 차종 정보 표시
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(review),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SearchPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Search Page'));
+  }
+}
+
+class WishListPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Wish List Page'));
+  }
+}
+
+class NoticePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Notice Page'));
+  }
+}
+
+class ProfilePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Profile Page'));
   }
 }
