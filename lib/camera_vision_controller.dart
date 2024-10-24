@@ -21,13 +21,13 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
-  String? _result;  // 분석 결과
-  final VisionApiService _visionApiService = VisionApiService();  // Vision API 서비스
+  String? _result; // 분석 결과
+  final VisionApiService _visionApiService = VisionApiService(); // Vision API 서비스
 
   @override
   void initState() {
     super.initState();
-    _initializeCamera();  // 카메라 초기화
+    _initializeCamera(); // 카메라 초기화
   }
 
   // 카메라 초기화 함수
@@ -39,7 +39,7 @@ class _CameraScreenState extends State<CameraScreen> {
       _controller = CameraController(firstCamera, ResolutionPreset.high);
       _initializeControllerFuture = _controller.initialize();
       setState(() {}); // 초기화가 완료되면 UI 업데이트
-    } catch(e) {
+    } catch (e) {
       print("카메라 초기화 오류: $e");
     }
   }
@@ -63,7 +63,7 @@ class _CameraScreenState extends State<CameraScreen> {
       // 촬영한 이미지를 Google Cloud Vision API로 분석
       final result = await _visionApiService.analyzeImage(imageFile.path);
       setState(() {
-        _result = result;  // 분석 결과 저장
+        _result = result; // 분석 결과 저장
       });
     } catch (e) {
       print(e);
@@ -72,7 +72,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   void dispose() {
-    _controller.dispose();  // 카메라 리소스 해제
+    _controller.dispose(); // 카메라 리소스 해제
     super.dispose();
   }
 
@@ -85,19 +85,31 @@ class _CameraScreenState extends State<CameraScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             // 카메라 화면 미리보기
-            return Column(
+            return Stack(
               children: [
-                Expanded(
-                  child: CameraPreview(_controller),
+                Positioned.fill(
+                  child: AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: CameraPreview(_controller),
+                  ),
                 ),
-                Text(
-                  _result == null ? 'No result yet.' : 'Result: $_result',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _takePictureAndAnalyze,
-                  child: Text('Capture and Analyze'),
+                Positioned(
+                  bottom: 20,
+                  left: 0,
+                  right: 0,
+                  child: Column(
+                    children: [
+                      Text(
+                        _result == null ? 'No result yet.' : 'Result: $_result',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _takePictureAndAnalyze,
+                        child: Text('Capture and Analyze'),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             );
