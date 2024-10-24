@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:capston/camera_vision_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -78,13 +79,13 @@ class ReviewPage extends StatelessWidget {
       padding: EdgeInsets.all(10.0),
       children: <Widget>[
         PostCard(
-          imageUrl: 'https://www.genesis.com/content/dam/genesis-p2/kr/assets/models/g80/24fl/color/genesis-kr-g80-facelift-standard-color-matte-makalu-gray-small.png',
+          imageUrl: 'https://jmagazine.joins.com/_data/photo/2020/04/3698936108_gHdfGr42_1.jpg',
           userName: 'User1',
           review: '이 차는 정말 훌륭해요!',
           carModel: "제네시스 G80",
         ),
         PostCard(
-          imageUrl: 'https://autoimg.danawa.com/photo/4455/51887/lineup_360.png',
+          imageUrl: 'https://www.hyundai.co.kr/image/upload/asset_library/MDA00000000000033027/bebeb59b7c7447f7be0a1f8238821cce.jpg',
           userName: 'User2',
           review: '연비가 좋고 디자인이 예뻐요.',
           carModel: "현대 더 뉴 아반떼",
@@ -135,7 +136,10 @@ class PostCard extends StatelessWidget {
 class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Search Page'));
+    return Scaffold(
+      appBar: null,
+      body: CameraScreen(), // CameraScreen을 body로 설정
+    );
   }
 }
 
