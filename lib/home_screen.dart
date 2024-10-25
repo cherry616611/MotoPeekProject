@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capston/camera_vision_controller.dart';
+import 'package:capston/page/homeButton_page.dart';
+import 'package:capston/page/reviewButton_page.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -10,11 +12,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    SearchPage(),
-    ReviewPage(), // 차량 리뷰 게시글 페이지
-    WishListPage(),
-    NoticePage(),
-    ProfilePage(),
+    HomePage(),       // 메인 홈 페이지
+    SearchPage(),     // 카메라 차량검색 페이지
+    ReviewPage(),     // 차량 리뷰 게시글 페이지
+    WishListPage(),   // 위시리스트 페이지
+    ProfilePage(),    //개인 페이지
   ];
 
   void _onItemTapped(int index) {
@@ -26,25 +28,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.lightBlue[100],
-        title: Text("Moto Peek!"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      backgroundColor: Colors.white,  // 배경색을 흰색으로 설정
+      appBar: null,
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.lightBlue,
+        selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey[300],
         backgroundColor: Colors.white,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'Search',
@@ -58,10 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Wish',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.campaign),
-            label: 'Notice',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'My',
           ),
@@ -71,68 +65,28 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class ReviewPage extends StatelessWidget {
+// 홈 페이지
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // 차량 리뷰 게시글을 리스트로 표시 (예시)
-    return ListView(
-      padding: EdgeInsets.all(10.0),
-      children: <Widget>[
-        PostCard(
-          imageUrl: 'https://jmagazine.joins.com/_data/photo/2020/04/3698936108_gHdfGr42_1.jpg',
-          userName: 'User1',
-          review: '이 차는 정말 훌륭해요!',
-          carModel: "제네시스 G80",
-        ),
-        PostCard(
-          imageUrl: 'https://www.hyundai.co.kr/image/upload/asset_library/MDA00000000000033027/bebeb59b7c7447f7be0a1f8238821cce.jpg',
-          userName: 'User2',
-          review: '연비가 좋고 디자인이 예뻐요.',
-          carModel: "현대 더 뉴 아반떼",
-        ),
-        // 더 많은 게시글 추가
-      ],
-    );
-  }
-}
-
-class PostCard extends StatelessWidget {
-  final String imageUrl;
-  final String userName;
-  final String review;
-  final String carModel;
-
-  PostCard({required this.imageUrl, required this.userName, required this.review, required this.carModel,});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.network(imageUrl),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              userName,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('차종: $carModel', style: TextStyle(fontSize: 16, color: Colors.grey)), // 차종 정보 표시
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(review),
+    return Scaffold(
+      backgroundColor: Colors.white,  // 배경색을 흰색으로 설정
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text(""),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications, color: Colors.white),
+            onPressed: () {},
           ),
         ],
       ),
+      body: HomeButtonPage(), // HomeButtonPage를 body로 설정
     );
   }
 }
 
+// 카메라 차량검색 페이지
 class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -143,6 +97,18 @@ class SearchPage extends StatelessWidget {
   }
 }
 
+// 사용자 리뷰 페이지
+class ReviewPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: null,
+      body: ReviewButtonPage(), // reviewButtonPage를 body로 설정
+    );
+  }
+}
+
+// 위시리스트 페이지
 class WishListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -150,13 +116,7 @@ class WishListPage extends StatelessWidget {
   }
 }
 
-class NoticePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Notice Page'));
-  }
-}
-
+// 개인 페이지
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
