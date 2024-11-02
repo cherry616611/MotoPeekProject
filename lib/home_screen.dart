@@ -102,6 +102,7 @@ class ReviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,  // 배경색을 흰색으로 설정
       appBar: null,
       body: ReviewButtonPage(), // reviewButtonPage를 body로 설정
     );
