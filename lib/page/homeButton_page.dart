@@ -213,7 +213,7 @@ class HomeButtonPage extends StatelessWidget {
                     SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(Icons.star, color: Colors.yellow, size: 16),
+                        Icon(Icons.star, color: Colors.yellow.shade800, size: 16),
                         SizedBox(width: 4),
                         Text(rating),
                       ],
@@ -364,7 +364,7 @@ class CarPurchaseTopPage extends StatelessWidget {
                             SizedBox(height: 4),
                             Row(
                               children: [
-                                Icon(Icons.star, color: Colors.yellow, size: 16),
+                                Icon(Icons.star, color: Colors.yellow.shade800, size: 16),
                                 Text(' ${car['rating']}'), // 평점
                               ],
                             ),

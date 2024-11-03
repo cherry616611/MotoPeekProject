@@ -130,6 +130,80 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
     },
   ];
 
+  // 유튜브 영상 데이터
+  List<Map<String, String>> videoData = [
+    {
+      'title': 'G80 | 제네시스 라이브러리 | 제네시스',
+      'channel': '제네시스 코리아',
+      'date': '2024.01.18',
+      'videoId': 'QSPrNkyGdfo',  // 유튜브 영상 ID
+    },
+    {
+      'title': '고가의 제네시스 G80이 모닝보다 잘 팔리는 이유! 중고차 감가 얼마나 심하길래..',
+      'channel': '중고차의모든것',
+      'date': '2024.02.13',
+      'videoId': 'cE9F3BTge3M',  // 유튜브 영상 ID
+    },
+    {
+      'title': '제네시스 G80 페이스리프트 모든 버튼 기능설명+사용꿀팁ㅣ25분만 투자하시면 받자마자 "똑똑하게" 사용하실 수 있습니다',
+      'channel': '블라인드_Car Story',
+      'date': '2024.02.19',
+      'videoId': '6WclvwCAzOE',
+    },
+    {
+      'title': '제네시스(GENESIS) G80 시승 | 한국 럭셔리 세단의 자존심.. 페이스리프트후 더욱더 고급스러워진..',
+      'channel': '차타TV',
+      'date': '2024.09.27',
+      'videoId': 'Wi4cGAnlxAg',
+    },
+    {
+      'title': '제네시스 G80 시승기...벤츠 E클래스와는 다른 매력!',
+      'channel': '김한용의 MOCAR',
+      'date': '2024.01.26',
+      'videoId': '4iHutNJtEn8',
+    },
+    // 추가 데이터 ...
+  ];
+
+  // 리뷰 탭에 넣을 데이터
+  final List<Map<String, dynamic>> reviews = [
+    {
+      'user': 'carLover123',
+      'colorOption': '우유니 화이트',
+      'rating': 4.5,
+      'images': [
+        'https://lh3.googleusercontent.com/proxy/WPGPCjALJPWkYOEDTs7GKnK_yIFoxKL6v11sYGljPxqxQInMGFayWEkSAlJLVRGZliDTJ2GgMz91ox7E93RsDFttKu-rU1ml_FRwaD1NgDpG8pgtMiAiJEBcNW9jf9keJNWoKok',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScixXqZCWOhYJpGev_X3CZBvSmC1YkUvJexw&s',
+        'https://img.hankyung.com/photo/202312/01.35416483.1.jpg',
+      ],
+    },
+    {
+      'user': 'speedster92',
+      'colorOption': '마칼루 그레이',
+      'rating': 4.0,
+      'images': [
+        'https://d2yvw3vh7zamx3.cloudfront.net/data/tuningContents/carspace1263/ohcar_bi_5_222737026262.jpg',
+        'https://d2yvw3vh7zamx3.cloudfront.net/data/tuningContents/carspace114/ohcar_bi_3_223024111113.jpg',
+        'https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/422/c2491fe7b62cf80361cab046a36c63c7_res.jpeg',
+      ],
+    },
+    {
+      'user': 'rideKing007',
+      'colorOption': '브루클린 브라운',
+      'rating': 4.8,
+      'images': [
+        'https://mblogthumb-phinf.pstatic.net/MjAyNDA3MTRfMTY5/MDAxNzIwOTQwMDM2ODQ5.YNrBPbE3Qgc92UlKuhaPGbrJJzKbV_CQIkyJaZNtwFMg.OGz_amzBgD7Hb0prJTSdh7ik87jcb3ZcHFNv7ZTbZesg.JPEG/IMG_6268.JPG?type=w800',
+        'https://mblogthumb-phinf.pstatic.net/MjAyNDA3MTRfMTY5/MDAxNzIwOTQwMDM2ODQ5.YNrBPbE3Qgc92UlKuhaPGbrJJzKbV_CQIkyJaZNtwFMg.OGz_amzBgD7Hb0prJTSdh7ik87jcb3ZcHFNv7ZTbZesg.JPEG/IMG_6268.JPG?type=w800',
+        'https://mblogthumb-phinf.pstatic.net/MjAyNDA3MTRfMjM2/MDAxNzIwOTQwMDM2MzM4.-v_2SjDig0tFWN_fSGphVQPMmItKuiAWJ3j8cc6OeUEg.thJubEaqO8BfaqX2VB4gtBLzRKmroB4JF0pQ4cAf3ZQg.JPEG/IMG_6306.JPG?type=w800',
+      ],
+    },
+  ];
+
+
+  // 영상 탭에서 유튜브 썸네일 구하는 메소드
+  String getThumbnailUrl(String videoId) {
+    return 'https://img.youtube.com/vi/$videoId/0.jpg';
+  }
 
   @override
   void initState() {
@@ -579,38 +653,52 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
                               int index = entry.key;
                               var data = entry.value;
 
-                              return Card(
-                                color: index == 0 ? Colors.white : Colors.grey.shade50,  // 첫 번째 데이터만 흰색 배경
-                                elevation: index == 0 ? 0 : 1,  // 첫 번째 데이터만 elevation을 0으로 설정
-                                margin: const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            data['type'] ?? '',
-                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                          ),
-                                          SizedBox(height: 4),
-                                          Text(
-                                            data['description'] ?? '',
-                                            style: TextStyle(fontSize: 13, color: Colors.grey),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
-                                        data['value'] ?? '',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: index == 0 ? Colors.red : Colors.blue, // 첫 번째 데이터만 빨간색
+                              return Container(
+                                decoration: index == 0
+                                    ? BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.red, // 테두리 색상
+                                    width: 1.0, // 테두리 두께
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0), // 테두리 모서리 둥글게
+                                )
+                                    : null, // index가 0이 아닐 때는 테두리를 설정하지 않음
+                                child: Card(
+                                  //color: index != 0 ? Colors.white : Colors.grey.shade50, // 첫 번째 데이터만 회색 배경
+                                  //elevation: index != 0 ? 0 : 1, // 첫 번째 데이터만 elevation 설정
+                                  color: Colors.white,
+                                  elevation: 0,
+                                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              data['type'] ?? '',
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              data['description'] ?? '',
+                                              style: TextStyle(fontSize: 13, color: Colors.grey),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
+                                        Text(
+                                          data['value'] ?? '',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: index == 0 ? FontWeight.bold : null,
+                                            //fontWeight: FontWeight.bold,
+                                            color: index == 0 ? Colors.red : Colors.blue, // 첫 번째 데이터만 빨간색
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
@@ -623,41 +711,193 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
 
                     // 세 번째 탭 내용 (리뷰)
                     ListView(
-                      padding: EdgeInsets.all(8.0),
-                      children: [
-                        ListTile(
-                          leading: Icon(Icons.person),
-                          title: Text("사용자1"),
-                          subtitle: Text("이 차는 매우 훌륭합니다."),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.person),
-                          title: Text("사용자2"),
-                          subtitle: Text("연비가 좋고 디자인이 예뻐요."),
-                        ),
-                      ],
+                      padding: EdgeInsets.all(0.0),
+                      children: reviews.map((review) => buildReviewCard(review)).toList(),
                     ),
 
 
                     // 네 번째 탭 내용 (영상)
-                    ListView(
-                      padding: EdgeInsets.all(8.0),
-                      children: [
-                        ListTile(
-                          leading: Icon(Icons.play_circle_fill),
-                          title: Text("제네시스 G80 상세 리뷰"),
-                          subtitle: Text("10분"),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.play_circle_fill),
-                          title: Text("G80 주행 테스트"),
-                          subtitle: Text("15분"),
-                        ),
-                      ],
+                    SingleChildScrollView(
+                      child: Column(
+                        children: videoData.map((data) {
+                          String videoId = data['videoId'] ?? '';
+                          String thumbnailUrl = getThumbnailUrl(videoId);
+
+                          return GestureDetector(
+                            onTap: () {
+                            },
+                            child: Card(
+                              color: Colors.white,
+                              elevation: 0,
+                              margin: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(12.0),
+                                        child: Image.network(
+                                          thumbnailUrl,
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: 200,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return Container(
+                                              color: Colors.grey[300],
+                                              height: 200,
+                                              child: Center(child: Icon(Icons.error)),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      Positioned.fill(
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            //Icons.play_circle_outline,
+                                            Icons.play_circle,
+                                            color: Colors.red,
+                                            size: 70.0,  // 아이콘 크기
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          data['title'] ?? '',
+                                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(height: 4),
+                                        Text(
+                                          '${data['channel']} • ${data['date']}',
+                                          style: TextStyle(fontSize: 13, color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                          );
+                        }).toList(),
+                      ),
                     ),
 
                   ],
                 ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  // 리뷰 탭 ui 구성 메소드
+  Widget buildReviewCard(Map<String, dynamic> review) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Card(
+        color: Colors.white,
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 사용자 정보
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    review['user'],
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // 자세히 보기 버튼
+                    },
+                    child: Text(
+                      '리뷰 보기 >',
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+
+              // 컬러 옵션 및 별점
+              Row(
+                children: [
+                  // 컬러 옵션 텍스트
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 4.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: Text(
+                      review['colorOption'],
+                      style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  // 별점
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                    decoration: BoxDecoration(
+                      color: null,
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Icon(Icons.star_border, color: Colors.yellow.shade800, size: 18), // 테두리 별
+                            Icon(Icons.star, color: Colors.yellow.shade800, size: 16), // 채워진 별
+                          ],
+                        ),
+                        Text(
+                          ' ${review['rating']}',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 12),
+
+              // 리뷰 이미지
+              GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 4,
+                  crossAxisSpacing: 4,
+                  childAspectRatio: 1,
+                ),
+                itemCount: review['images'].length,
+                itemBuilder: (context, index) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      review['images'][index],
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image),
+                    ),
+                  );
+                },
               ),
             ],
           ),
