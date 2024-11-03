@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:capston/page/carDetail_page.dart';
 
 class HomeButtonPage extends StatelessWidget {
   @override
@@ -129,27 +130,38 @@ class HomeButtonPage extends StatelessWidget {
   Widget buildCarItem(BuildContext context, String carName, String imageUrl) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      child: GestureDetector(
+        onTap: () {
+          // CarDetailPage로 이동
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CarDetailPage(),
+            ),
+          );
+        },
       child: Column(
-        children: [
-          Container(
-            width: 120,
-            height: 100,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10.0), // 모서리를 둥글게 설정
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                    Center(child: Icon(Icons.broken_image)),
+          children: [
+            Container(
+              width: 120,
+              height: 100,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0), // 모서리를 둥글게 설정
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      Center(child: Icon(Icons.broken_image)),
+                ),
               ),
             ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            carName,
-            style: TextStyle(fontSize: 14),
-          ),
-        ],
+            SizedBox(height: 8),
+            Text(
+              carName,
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
       ),
     );
   }
