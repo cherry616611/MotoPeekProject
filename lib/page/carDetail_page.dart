@@ -226,7 +226,7 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
         backgroundColor: Colors.white,
         actions: [
           IconButton(
-            icon: Icon(Icons.share),
+            icon: Icon(Icons.favorite_border),
             onPressed: () {
               // 공유 기능 구현
             },
