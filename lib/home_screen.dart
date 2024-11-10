@@ -1,3 +1,5 @@
+import 'package:capston/page/profileButton_page.dart';
+import 'package:capston/page/wishButton_page.dart';
 import 'package:flutter/material.dart';
 import 'package:capston/camera_vision_controller.dart';
 import 'package:capston/page/homeButton_page.dart';
@@ -113,7 +115,11 @@ class ReviewPage extends StatelessWidget {
 class WishListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Wish List Page'));
+    return Scaffold(
+      backgroundColor: Colors.white,  // 배경색을 흰색으로 설정
+      appBar: null,
+      body: WishButtonPage(), // reviewButtonPage를 body로 설정
+    );
   }
 }
 
@@ -121,6 +127,10 @@ class WishListPage extends StatelessWidget {
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Profile Page'));
+    return Scaffold(
+      backgroundColor: Colors.white,  // 배경색을 흰색으로 설정
+      appBar: null,
+      body: ProfileButtonPage(), // reviewButtonPage를 body로 설정
+    );
   }
 }

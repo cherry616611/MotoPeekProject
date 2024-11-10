@@ -56,9 +56,9 @@ class HomeButtonPage extends StatelessWidget {
               children: [
                 buildCarItem(context, '현대 캐스퍼', 'https://contents-cdn.viewus.co.kr/image/2024/07/CP-2023-0096/image-b868c07a-8a04-44cc-9f07-a591905a3680.jpeg'),
                 buildCarItem(context, '현대 쏘나타 디엣지', 'https://i.namu.wiki/i/48AmSGHd7s9-Vov2VuWOhMK1sC-NnPsDOwsWb-jNnvLc-EOy2ay2gjIs2aoL-GrylnEnOE9rEeL_P7YfxFDmoA.webp'),
-                buildCarItem(context, '기아 k5', 'https://i.namu.wiki/i/AbegGaJhwDZkGgjv1_qvBN-SB4YdVWMgC9PN_JKPyz_hy8sfzgv_GOrkUWJ0hOvGOAULb9fvND79ZM2WocgtQK50Sm1d2otoavVEGX6WxIJcvqkb71JrcDTriEykKBldfBlb2GMV4Y1LpkGqs_6zJw.webp'),
+                buildCarItem(context, '기아 k5', 'https://cdn.autodaily.co.kr/news/photo/202403/515439_123084_221.jpg'),
                 buildCarItem(context, '기아 k8', 'https://i.namu.wiki/i/28lgcdzUQRdFHt44yosn6iADzenfuD36D8PzoOwuqWS-1dK__qGIClDCrLJFCW9MNwCA0W5DxBrzVQyOXcIgFA.webp'),
-                buildCarItem(context, '현대 그랜저', 'https://i.namu.wiki/i/wkefWbpUvEIQO59-Y3Vdnbyk38YIrl6Dcnbf4MUjR7VQnkY4jaSUJJiq6iuBlSXd0OhBROER4E71r-5UNVS9ormzXfLryPUaMRmVi2_cvqEqaQvGSfKJqJ_n-RDtGfS1zzL7AFYkQ0pO1Awy249QiA.webp'),
+                buildCarItem(context, '현대 그랜저', 'https://www.hyundai.com/static/images/model/grandeur/25my/mo/grandeur_highlights_usp_m.jpg'),
               ],
             ),
           ),
@@ -284,7 +284,7 @@ class CarPurchaseTopPage extends StatelessWidget {
     {
       'rank': 3,
       'name': '벤츠 E-Class(W213)',
-      'imageUrl': 'https://i.namu.wiki/i/MHWRQ95YkvcziNj0lFjXK6eszjpVXGr6Mvwch72-cVlbd4kU2fHqjn6Stdj86AACTPC8HkqIj5P6D5SzDyhG8yQTRMDxb93V_WmEIkNDf6S9KnUWKym9UnPfMPj1ploc7CV8U_pQXZNZ5dCRfwOaZg.webp',
+      'imageUrl': 'https://i.namu.wiki/i/iXsKUgMpIDwBMSGyS3ZHjf9rQ2fnAu7eWc2A4RXXytHwNLAIAXOUz6BKkxPjbXLIGHGEy0iYTo6eS54Jp6lF_t5Wt5fWD4IVsSgMJLlZQe3MTvfBmaeaZkZki1JAE5Tay11kt5wfB836MYYKIRiipw.webp',
       'price': '약 3,290만 원 ~',
       'rating': '4.9 (678명)',
     },
