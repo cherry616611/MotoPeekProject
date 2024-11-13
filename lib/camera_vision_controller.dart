@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'api/vision_api_service.dart';
+import 'package:capston/page/carDetail_page.dart';
 
 Future<void> _requestPermission() async {
   var status = await Permission.camera.status;
@@ -23,6 +24,7 @@ class _CameraScreenState extends State<CameraScreen> {
   late Future<void> _initializeControllerFuture;
   String? _result; // 분석 결과
   final VisionApiService _visionApiService = VisionApiService(); // Vision API 서비스
+  List<String> validResults = ["Car", "Tire", "Automotive parking light", "Wheel"]; // API 분석 결과
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   // 사진 촬영 및 분석 함수
-  Future<void> _takePictureAndAnalyze() async {
+  Future<void> _takePictureAndAnalyze(BuildContext context) async {
     try {
       await _initializeControllerFuture;
 
@@ -65,6 +67,16 @@ class _CameraScreenState extends State<CameraScreen> {
       setState(() {
         _result = result; // 분석 결과 저장
       });
+
+      // 결과가 validResults에 포함되어 있는지 확인하고 페이지 이동
+      if (validResults.contains(_result)) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CarDetailPage(),
+            ),
+          );
+      };
     } catch (e) {
       print(e);
     }
@@ -99,15 +111,36 @@ class _CameraScreenState extends State<CameraScreen> {
                   right: 0,
                   child: Column(
                     children: [
-                      Text(
-                        _result == null ? 'No result yet.' : 'Result: $_result',
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
+                      // _result가 null이면 아무 것도 표시되지 않음
+                      if (_result != null)
+                        Text(
+                          validResults.contains(_result)
+                              ? '' // 조건에 맞으면 빈 문자열 (아무 것도 표시되지 않음)
+                              : '차량을 다시 촬영해주세요',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
                       SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: _takePictureAndAnalyze,
-                        child: Text('Capture and Analyze'),
+                        onPressed: () async {
+                          await _takePictureAndAnalyze(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black, // 버튼 배경 색 설정
+                          side: BorderSide(color: Colors.white, width: 2), // 테두리 색과 두께 설정
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min, // Row의 크기를 버튼 크기에 맞게 설정
+                          children: [
+                            Icon(Icons.camera_alt, color: Colors.white), // 카메라 아이콘 추가
+                            SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
+                            Text(
+                              '차량 분석',
+                              style: TextStyle(color: Colors.white), // 글자 색 설정
+                            ),
+                          ],
+                        ),
                       ),
+
                     ],
                   ),
                 ),
