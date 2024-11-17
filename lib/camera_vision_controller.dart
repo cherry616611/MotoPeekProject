@@ -113,7 +113,7 @@ class _CameraScreenState extends State<CameraScreen> {
                     children: [
                       // _result가 null이면 아무 것도 표시되지 않음
                       if (_result != null)
-                        Text(
+                         Text(
                           validResults.contains(_result)
                               ? '' // 조건에 맞으면 빈 문자열 (아무 것도 표시되지 않음)
                               : '차량을 다시 촬영해주세요',

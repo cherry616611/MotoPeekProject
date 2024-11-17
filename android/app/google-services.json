@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "715264276621",
+    "project_id": "motopeekproject",
+    "storage_bucket": "motopeekproject.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715264276621:android:9a307479ec801354accac4",
+        "android_client_info": {
+          "package_name": "com.example.capston"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX1muCJ8ouZjjSqSpLtXIPnJB3v-U_O7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715264276621:android:94bc1fc8143d3442accac4",
+        "android_client_info": {
+          "package_name": "com.example1.moto_peek_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX1muCJ8ouZjjSqSpLtXIPnJB3v-U_O7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

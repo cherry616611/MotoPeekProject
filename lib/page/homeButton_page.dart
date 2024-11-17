@@ -284,7 +284,7 @@ class CarPurchaseTopPage extends StatelessWidget {
     {
       'rank': 3,
       'name': '벤츠 E-Class(W213)',
-      'imageUrl': 'https://i.namu.wiki/i/iXsKUgMpIDwBMSGyS3ZHjf9rQ2fnAu7eWc2A4RXXytHwNLAIAXOUz6BKkxPjbXLIGHGEy0iYTo6eS54Jp6lF_t5Wt5fWD4IVsSgMJLlZQe3MTvfBmaeaZkZki1JAE5Tay11kt5wfB836MYYKIRiipw.webp',
+      'imageUrl': 'https://img.carmanager.co.kr/temp/photo/2024/20240531/B6EFE3D0814B0188EDDDCFA725EF00956A0971A64B4847C7ACF566BA8A7AACF7.jpg',
       'price': '약 3,290만 원 ~',
       'rating': '4.9 (678명)',
     },
