@@ -1,7 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:capston/page/carDetail_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeButtonPage extends StatelessWidget {
+  // Firebase에서 원하는 문서만 가져오는 코드
+  // carIds에 가져오고 싶은 차량 문서의 이름을 넣으면 된다.
+  Future<List<Map<String, dynamic>>> fetchSpecificCars(List<String> carIds) async {
+    // 모든 문서를 비동기로 가져오기
+    List<Future<DocumentSnapshot>> futures = carIds.map((id) {
+      return FirebaseFirestore.instance.collection('cars').doc(id).get();
+    }).toList();
+
+    // 모든 Future 완료 대기
+    List<DocumentSnapshot> snapshots = await Future.wait(futures);
+
+    // 데이터를 Map 형태로 변환
+    return snapshots
+        .where((snapshot) => snapshot.exists) // 문서가 존재하는 경우만
+        .map((snapshot) => snapshot.data() as Map<String, dynamic>)
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -25,21 +45,40 @@ class HomeButtonPage extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          Container(
-            height: 150, // 가로 스크롤 리스트 높이 지정
-            child: ListView(
-              scrollDirection: Axis.horizontal, // 가로 스크롤 설정
-              children: [
-                buildCarItem(context, '제네시스 G80', 'https://cdn.hankyung.com/photo/202401/06.35551589.1.jpg'),
-                buildCarItem(context, '현대 아반떼', 'https://res.heraldm.com/content/image/2024/05/11/20240511050016_0.jpg'),
-                buildCarItem(context, '기아 쏘렌토', 'https://www.kia.com/content/dam/kwp/kr/ko/vehicles/sorento/24pe/content/sorento_safety_lfa_hda_sm.jpg'),
-                buildCarItem(context, 'BMW 320i', 'https://cdn.top-rider.com/news/photo/202003/28873_107726_842.jpg'),
-                buildCarItem(context, '벤츠 E-Class', 'https://i.namu.wiki/i/6SGvjx4StCUe4Nzu8Cvgc_romqByXaqwQd6wUVJRI1CHf7b6O80xpe_o-RpugZCxHsa9X9ahwivdADvM6Yspsw.webp'),
-              ],
-            ),
-          ),
+          FutureBuilder<List<Map<String, dynamic>>>(
+            future: fetchSpecificCars(['genesis_g80', 'benz_e-class', 'bmw_320i', 'hyundai_avante', 'kia_sorento']),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text('오류가 발생했습니다.'));
+              }
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text('해당 데이터가 없습니다.'));
+              }
 
-          SizedBox(height: 20.0), // 여백 추가
+              // 데이터 렌더링
+              List<Map<String, dynamic>> cars = snapshot.data!;
+              return Container(
+                height: 150, // 가로 스크롤 리스트 높이 지정
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal, // 가로 스크롤 설정
+                    itemCount: cars.length,
+                    itemBuilder: (context, index) {
+                      Map<String, dynamic> car = cars[index];
+                      String make = car['make'] ?? 'Unknown Make';
+                      String name = car['name'] ?? 'Unknown Model';
+                      String imageUrl = car['imageUrl'] ?? 'Unknow Image';
+
+                      // 개별 아이템 렌더링
+                      return buildCarItem(context, make, name, imageUrl);
+                    },
+                ),
+              );
+            },
+          ),
+           SizedBox(height: 20.0), // 여백 추가
 
           // 맞춤형 추천 차량 섹션
           Padding(
@@ -49,18 +88,51 @@ class HomeButtonPage extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          Container(
+          /*Container(
             height: 150, // 가로 스크롤 리스트 높이 지정
             child: ListView(
               scrollDirection: Axis.horizontal, // 가로 스크롤 설정
               children: [
-                buildCarItem(context, '현대 캐스퍼', 'https://contents-cdn.viewus.co.kr/image/2024/07/CP-2023-0096/image-b868c07a-8a04-44cc-9f07-a591905a3680.jpeg'),
-                buildCarItem(context, '현대 쏘나타 디엣지', 'https://i.namu.wiki/i/48AmSGHd7s9-Vov2VuWOhMK1sC-NnPsDOwsWb-jNnvLc-EOy2ay2gjIs2aoL-GrylnEnOE9rEeL_P7YfxFDmoA.webp'),
-                buildCarItem(context, '기아 k5', 'https://cdn.autodaily.co.kr/news/photo/202403/515439_123084_221.jpg'),
-                buildCarItem(context, '기아 k8', 'https://i.namu.wiki/i/28lgcdzUQRdFHt44yosn6iADzenfuD36D8PzoOwuqWS-1dK__qGIClDCrLJFCW9MNwCA0W5DxBrzVQyOXcIgFA.webp'),
-                buildCarItem(context, '현대 그랜저', 'https://www.hyundai.com/static/images/model/grandeur/25my/mo/grandeur_highlights_usp_m.jpg'),
+                buildCarItem(context, '현대', '캐스퍼', 'https://contents-cdn.viewus.co.kr/image/2024/07/CP-2023-0096/image-b868c07a-8a04-44cc-9f07-a591905a3680.jpeg'),
+                buildCarItem(context, '현대', '쏘나타 디엣지', 'https://i.namu.wiki/i/48AmSGHd7s9-Vov2VuWOhMK1sC-NnPsDOwsWb-jNnvLc-EOy2ay2gjIs2aoL-GrylnEnOE9rEeL_P7YfxFDmoA.webp'),
+                buildCarItem(context, '기아', 'k5', 'https://cdn.autodaily.co.kr/news/photo/202403/515439_123084_221.jpg'),
+                buildCarItem(context, '기아', 'k8', 'https://i.namu.wiki/i/28lgcdzUQRdFHt44yosn6iADzenfuD36D8PzoOwuqWS-1dK__qGIClDCrLJFCW9MNwCA0W5DxBrzVQyOXcIgFA.webp'),
+                buildCarItem(context, '현대', '그랜저', 'https://www.hyundai.com/static/images/model/grandeur/25my/mo/grandeur_highlights_usp_m.jpg'),
               ],
             ),
+          ),*/
+          FutureBuilder<List<Map<String, dynamic>>>(
+            future: fetchSpecificCars(['hyundai_casper', 'hyundai_sonataTheEdge', 'kia_k5', 'kia_k8', 'hyundai_grandeur']),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text('오류가 발생했습니다.'));
+              }
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text('해당 데이터가 없습니다.'));
+              }
+
+              // 데이터 렌더링
+              List<Map<String, dynamic>> cars = snapshot.data!;
+              return Container(
+                height: 150, // 가로 스크롤 리스트 높이 지정
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal, // 가로 스크롤 설정
+                  itemCount: cars.length,
+                  itemBuilder: (context, index) {
+                    Map<String, dynamic> car = cars[index];
+                    String make = car['make'] ?? 'Unknown Make';
+                    String name = car['name'] ?? 'Unknown Model';
+                    String imageUrl = car['imageUrl'] ?? 'Unknow Image';
+
+                    // 개별 아이템 렌더링
+                    return buildCarItem(context, make, name, imageUrl);
+                  },
+                ),
+              );
+            },
           ),
           SizedBox(height: 20.0), // 여백 추가
 
@@ -127,7 +199,7 @@ class HomeButtonPage extends StatelessWidget {
   }
 
   // 개별 차량 위젯 생성 함수(차량 이미지, 차량 이름)
-  Widget buildCarItem(BuildContext context, String carName, String imageUrl) {
+  Widget buildCarItem(BuildContext context, String carMake, String carName, String imageUrl) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: GestureDetector(
@@ -156,10 +228,19 @@ class HomeButtonPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8),
-            Text(
-              carName,
-              style: TextStyle(fontSize: 14),
-            ),
+            Row(
+              children: [
+                Text(
+                  carMake,
+                  style: TextStyle(fontSize: 14),
+                ),
+                SizedBox(width: 8),
+                Text(
+                  carName,
+                  style: TextStyle(fontSize: 14),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -210,7 +291,7 @@ class HomeButtonPage extends StatelessWidget {
                       price,
                       style: TextStyle(fontSize: 13, color: Colors.grey),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 2),
                     Row(
                       children: [
                         Icon(Icons.star, color: Colors.yellow.shade800, size: 16),
