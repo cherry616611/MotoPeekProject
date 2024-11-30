@@ -77,6 +77,14 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
         .get();
     final lease_model_details = leaseModelSnapshot.docs.map((doc) => doc.data()).toList();
 
+    // maintenance_data 서브컬렉션 가져오기
+    final maintenanceDataSnapshot = await FirebaseFirestore.instance
+        .collection('cars')
+        .doc(docId)
+        .collection('maintenance_data')
+        .get();
+    final maintenance_data = maintenanceDataSnapshot.docs.map((doc) => doc.data()).toList();
+
     return {
       'carData': carData,
       'colors': colors,
@@ -84,6 +92,7 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
       'used_model_details': used_model_details,
       'rent_model_details': rent_model_details,
       'lease_model_details': lease_model_details,
+      'maintenance_data': maintenance_data,
     };
   }
 
@@ -108,6 +117,7 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
         final used_model_details = snapshot.data!['used_model_details'] as List<Map<String, dynamic>>;
         final rent_model_details = snapshot.data!['rent_model_details'] as List<Map<String, dynamic>>;
         final lease_model_details = snapshot.data!['lease_model_details'] as List<Map<String, dynamic>>;
+        final maintenance_data = snapshot.data!['maintenance_data'] as List<Map<String, dynamic>>;
 
         return CarDetailView(
             carData: carData,
@@ -116,6 +126,7 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
             used_model_details: used_model_details,
             rent_model_details: rent_model_details,
             lease_model_details: lease_model_details,
+            maintenance_data: maintenance_data,
             tabController: _tabController
         );
       },

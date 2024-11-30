@@ -7,6 +7,7 @@ class CarDetailView extends StatefulWidget {
   final List<Map<String, dynamic>> used_model_details;
   final List<Map<String, dynamic>> rent_model_details;
   final List<Map<String, dynamic>> lease_model_details;
+  final List<Map<String, dynamic>> maintenance_data;
   final TabController tabController;
 
   CarDetailView({
@@ -16,6 +17,7 @@ class CarDetailView extends StatefulWidget {
     required this.used_model_details,
     required this.rent_model_details,
     required this.lease_model_details,
+    required this.maintenance_data,
     required this.tabController
   });
 
@@ -29,6 +31,7 @@ class _CarDetailViewState extends State<CarDetailView> {
   late List<String> colorNames;
   late List<String> colorImages;
   late List<Color> colorOptions;
+  late List<Map<String, dynamic>> sortedMaintenanceData;
 
   @override
   void initState() {
@@ -44,6 +47,11 @@ class _CarDetailViewState extends State<CarDetailView> {
     }).toList();
     selectedColorIndex = 0;
     carImageUrl = colorImages.isNotEmpty ? colorImages[0] : ''; // 첫 번째 색상의 이미지를 기본값으로 사용
+    //정렬된 유지비 데이터
+    sortedMaintenanceData = [
+      ...widget.maintenance_data.where((data) => data['type'] == "총 예상 유지비"),
+      ...widget.maintenance_data.where((data) => data['type'] != "총 예상 유지비"),
+    ];
   }
 
   @override
@@ -469,7 +477,73 @@ class _CarDetailViewState extends State<CarDetailView> {
                     ),
 
 
-                    Center(child: Text('유지비 탭 내용')),
+                    // 두 번째 탭 내용 (유지비)
+                    SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            children: sortedMaintenanceData.asMap().entries.map((entry) {
+                              int index = entry.key;
+                              var data = entry.value;
+
+                              return Container(
+                                decoration: index == 0
+                                    ? BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.red, // 테두리 색상
+                                    width: 1.0, // 테두리 두께
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0), // 테두리 모서리 둥글게
+                                )
+                                    : null, // index가 0이 아닐 때는 테두리를 설정하지 않음
+                                child: Card(
+                                  //color: index != 0 ? Colors.white : Colors.grey.shade50, // 첫 번째 데이터만 회색 배경
+                                  //elevation: index != 0 ? 0 : 1, // 첫 번째 데이터만 elevation 설정
+                                  color: Colors.white,
+                                  elevation: 0,
+                                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              data['type'] ?? '',
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              data['description'] ?? '',
+                                              style: TextStyle(fontSize: 13, color: Colors.grey),
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          data['value'] ?? '',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: index == 0 ? FontWeight.bold : null,
+                                            //fontWeight: FontWeight.bold,
+                                            color: index == 0 ? Colors.red : Colors.blue, // 첫 번째 데이터만 빨간색
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+
+
+
                     Center(child: Text('리뷰 탭 내용')),
                     Center(child: Text('영상 탭 내용')),
                   ],
