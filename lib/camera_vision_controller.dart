@@ -73,7 +73,7 @@ class _CameraScreenState extends State<CameraScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CarDetailPage(),
+              builder: (context) => CarDetailPage(docId: "genesis_g80"),
             ),
           );
       };

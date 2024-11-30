@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:capston/page/carDetail_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeButtonPage extends StatelessWidget {
+  List<String> recent_list = ['genesis_g80', 'benz_e-class', 'bmw_320i', 'hyundai_avante', 'kia_sorento']; //최근 검색 목록
+  List<String> recommended_list = ['hyundai_casper', 'hyundai_sonataTheEdge', 'kia_k5', 'kia_k8', 'hyundai_grandeur'];
+
   // Firebase에서 원하는 문서만 가져오는 코드
   // carIds에 가져오고 싶은 차량 문서의 이름을 넣으면 된다.
-  Future<List<Map<String, dynamic>>> fetchSpecificCars(List<String> carIds) async {
+  Future<List<Map<String, dynamic>>> fetchSpecificCars(List<String> docIds) async {
     // 모든 문서를 비동기로 가져오기
-    List<Future<DocumentSnapshot>> futures = carIds.map((id) {
+    List<Future<DocumentSnapshot>> futures = docIds.map((id) {
       return FirebaseFirestore.instance.collection('cars').doc(id).get();
     }).toList();
 
@@ -18,7 +20,11 @@ class HomeButtonPage extends StatelessWidget {
     // 데이터를 Map 형태로 변환
     return snapshots
         .where((snapshot) => snapshot.exists) // 문서가 존재하는 경우만
-        .map((snapshot) => snapshot.data() as Map<String, dynamic>)
+        .map((snapshot) {
+          Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+          data['id'] = snapshot.id; // 문서 ID 추가
+          return data;
+        })
         .toList();
   }
 
@@ -46,7 +52,7 @@ class HomeButtonPage extends StatelessWidget {
             ),
           ),
           FutureBuilder<List<Map<String, dynamic>>>(
-            future: fetchSpecificCars(['genesis_g80', 'benz_e-class', 'bmw_320i', 'hyundai_avante', 'kia_sorento']),
+            future: fetchSpecificCars(recent_list),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
@@ -70,9 +76,10 @@ class HomeButtonPage extends StatelessWidget {
                       String make = car['make'] ?? 'Unknown Make';
                       String name = car['name'] ?? 'Unknown Model';
                       String imageUrl = car['imageUrl'] ?? 'Unknow Image';
+                      String docId = car['id'];
 
                       // 개별 아이템 렌더링
-                      return buildCarItem(context, make, name, imageUrl);
+                      return buildCarItem(context, make, name, imageUrl, docId);
                     },
                 ),
               );
@@ -88,21 +95,8 @@ class HomeButtonPage extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          /*Container(
-            height: 150, // 가로 스크롤 리스트 높이 지정
-            child: ListView(
-              scrollDirection: Axis.horizontal, // 가로 스크롤 설정
-              children: [
-                buildCarItem(context, '현대', '캐스퍼', 'https://contents-cdn.viewus.co.kr/image/2024/07/CP-2023-0096/image-b868c07a-8a04-44cc-9f07-a591905a3680.jpeg'),
-                buildCarItem(context, '현대', '쏘나타 디엣지', 'https://i.namu.wiki/i/48AmSGHd7s9-Vov2VuWOhMK1sC-NnPsDOwsWb-jNnvLc-EOy2ay2gjIs2aoL-GrylnEnOE9rEeL_P7YfxFDmoA.webp'),
-                buildCarItem(context, '기아', 'k5', 'https://cdn.autodaily.co.kr/news/photo/202403/515439_123084_221.jpg'),
-                buildCarItem(context, '기아', 'k8', 'https://i.namu.wiki/i/28lgcdzUQRdFHt44yosn6iADzenfuD36D8PzoOwuqWS-1dK__qGIClDCrLJFCW9MNwCA0W5DxBrzVQyOXcIgFA.webp'),
-                buildCarItem(context, '현대', '그랜저', 'https://www.hyundai.com/static/images/model/grandeur/25my/mo/grandeur_highlights_usp_m.jpg'),
-              ],
-            ),
-          ),*/
           FutureBuilder<List<Map<String, dynamic>>>(
-            future: fetchSpecificCars(['hyundai_casper', 'hyundai_sonataTheEdge', 'kia_k5', 'kia_k8', 'hyundai_grandeur']),
+            future: fetchSpecificCars(recommended_list),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
@@ -126,9 +120,10 @@ class HomeButtonPage extends StatelessWidget {
                     String make = car['make'] ?? 'Unknown Make';
                     String name = car['name'] ?? 'Unknown Model';
                     String imageUrl = car['imageUrl'] ?? 'Unknow Image';
+                    String docId = car['id'];
 
                     // 개별 아이템 렌더링
-                    return buildCarItem(context, make, name, imageUrl);
+                    return buildCarItem(context, make, name, imageUrl, docId);
                   },
                 ),
               );
@@ -199,7 +194,7 @@ class HomeButtonPage extends StatelessWidget {
   }
 
   // 개별 차량 위젯 생성 함수(차량 이미지, 차량 이름)
-  Widget buildCarItem(BuildContext context, String carMake, String carName, String imageUrl) {
+  Widget buildCarItem(BuildContext context, String carMake, String carName, String imageUrl, String docId) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: GestureDetector(
@@ -208,7 +203,7 @@ class HomeButtonPage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CarDetailPage(),
+              builder: (context) => CarDetailPage(docId: docId),
             ),
           );
         },
