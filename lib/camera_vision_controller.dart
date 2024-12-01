@@ -73,7 +73,7 @@ class _CameraScreenState extends State<CameraScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CarDetailPage(docId: "genesis_g80"),
+              builder: (context) => CarDetailPage(docId: "hyundai_LFsonata"),
             ),
           );
       };

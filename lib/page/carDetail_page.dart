@@ -73,7 +73,7 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
     final leaseModelSnapshot = await FirebaseFirestore.instance
         .collection('cars')
         .doc(docId)
-        .collection('rent_model_details')
+        .collection('lease_model_details')
         .get();
     final lease_model_details = leaseModelSnapshot.docs.map((doc) => doc.data()).toList();
 
@@ -140,6 +140,7 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
         final video_data = snapshot.data!['video_data'] as List<Map<String, dynamic>>;
 
         return CarDetailView(
+            docId: widget.docId,
             carData: carData,
             colors: colors,
             new_model_details: new_model_details,

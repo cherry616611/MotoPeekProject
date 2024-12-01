@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CarDetailView extends StatefulWidget {
+  final String docId;
   final Map<String, dynamic> carData;
   final List<Map<String, dynamic>> colors;
   final List<Map<String, dynamic>> new_model_details;
@@ -13,6 +15,7 @@ class CarDetailView extends StatefulWidget {
   final TabController tabController;
 
   CarDetailView({
+    required this.docId,
     required this.carData,
     required this.colors,
     required this.new_model_details,
@@ -36,6 +39,7 @@ class _CarDetailViewState extends State<CarDetailView> {
   late List<String> colorImages;
   late List<Color> colorOptions;
   late List<Map<String, dynamic>> sortedMaintenanceData;
+  bool isWish = false; // 위시리스트 체크 여부 상태
 
   @override
   void initState() {
@@ -56,6 +60,36 @@ class _CarDetailViewState extends State<CarDetailView> {
       ...widget.maintenance_data.where((data) => data['type'] == "총 예상 유지비"),
       ...widget.maintenance_data.where((data) => data['type'] != "총 예상 유지비"),
     ];
+    _fetchWishStatus(); // 초기 wish 상태 가져오기
+  }
+
+  // Firebase에서 현재 wish 상태를 가져옴
+  Future<void> _fetchWishStatus() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('cars')
+        .doc(widget.docId)
+        .get();
+
+    if (snapshot.exists) {
+      setState(() {
+        isWish = snapshot['wish'] ?? false; // wish 필드 값 가져오기
+      });
+    }
+  }
+
+  // wish 상태 변경 함수
+  Future<void> _toggleWish() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('cars')
+          .doc(widget.docId)
+          .update({'wish': !isWish}); // wish 값을 반전
+      setState(() {
+        isWish = !isWish; // UI 업데이트
+      });
+    } catch (e) {
+      print("Failed to update wish: $e");
+    }
   }
 
   @override
@@ -70,10 +104,11 @@ class _CarDetailViewState extends State<CarDetailView> {
         backgroundColor: Colors.white,
         actions: [
           IconButton(
-            icon: Icon(Icons.favorite_border),
-            onPressed: () {
-              // 위시리스트 기능 구현
-            },
+            icon: Icon(
+              isWish ? Icons.favorite : Icons.favorite_border, // 상태에 따라 아이콘 변경
+              color: isWish ? Colors.red : Colors.grey, // 상태에 따라 색상 변경
+            ),
+            onPressed: _toggleWish, // 버튼 클릭 시 상태 변경 함수 호출
           ),
         ],
       ),
