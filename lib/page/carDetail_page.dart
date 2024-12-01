@@ -85,6 +85,22 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
         .get();
     final maintenance_data = maintenanceDataSnapshot.docs.map((doc) => doc.data()).toList();
 
+    // reviews 서브컬렉션 가져오기
+    final reviewsSnapshot = await FirebaseFirestore.instance
+        .collection('cars')
+        .doc(docId)
+        .collection('reviews')
+        .get();
+    final reviews = reviewsSnapshot.docs.map((doc) => doc.data()).toList();
+
+    // video_data 서브컬렉션 가져오기
+    final videoDataSnapshot = await FirebaseFirestore.instance
+        .collection('cars')
+        .doc(docId)
+        .collection('video_data')
+        .get();
+    final video_data = videoDataSnapshot.docs.map((doc) => doc.data()).toList();
+
     return {
       'carData': carData,
       'colors': colors,
@@ -93,6 +109,8 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
       'rent_model_details': rent_model_details,
       'lease_model_details': lease_model_details,
       'maintenance_data': maintenance_data,
+      'reviews': reviews,
+      'video_data': video_data,
     };
   }
 
@@ -118,6 +136,8 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
         final rent_model_details = snapshot.data!['rent_model_details'] as List<Map<String, dynamic>>;
         final lease_model_details = snapshot.data!['lease_model_details'] as List<Map<String, dynamic>>;
         final maintenance_data = snapshot.data!['maintenance_data'] as List<Map<String, dynamic>>;
+        final reviews = snapshot.data!['reviews'] as List<Map<String, dynamic>>;
+        final video_data = snapshot.data!['video_data'] as List<Map<String, dynamic>>;
 
         return CarDetailView(
             carData: carData,
@@ -127,6 +147,8 @@ class _CarDetailPageState extends State<CarDetailPage> with SingleTickerProvider
             rent_model_details: rent_model_details,
             lease_model_details: lease_model_details,
             maintenance_data: maintenance_data,
+            reviews: reviews,
+            video_data: video_data,
             tabController: _tabController
         );
       },
