@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capston/page/review_writing_page.dart';
+import 'package:intl/intl.dart';
 
 class ReviewButtonPage extends StatefulWidget {
   @override
@@ -69,7 +70,6 @@ class _ReviewButtonPageState extends State<ReviewButtonPage> {
                     children: [
                       ...reviews.map((reviewDoc) {
                         final review = reviewDoc.data() as Map<String, dynamic>;
-
                         // 이미지 URL 리스트 구성
                         final List<String> imageUrls = [];
                         for (int i = 1; i <= 3; i++) {
@@ -130,6 +130,7 @@ class _ReviewButtonPageState extends State<ReviewButtonPage> {
                                           BorderRadius.circular(12.0),
                                         ),
                                         child: Text(
+                                          
                                           review['colorOption'] ?? 'N/A',
                                           style: TextStyle(
                                               fontSize: 14,
@@ -201,7 +202,10 @@ class _ReviewButtonPageState extends State<ReviewButtonPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 3.0, vertical: 8.0),
                                   child: Text(
-                                    review['date'] ?? '',
+                                    //review['date'] ?? '',
+                                    review['date'] != null
+                                        ? DateFormat('yyyy년 M월 d일').format((review['date'] as Timestamp).toDate())
+                                        : '', // 날짜가 null일 경우 빈 문자열 표시
                                     style: TextStyle(
                                         color: Colors.grey, fontSize: 12),
                                   ),
@@ -229,7 +233,7 @@ class _ReviewButtonPageState extends State<ReviewButtonPage> {
           ).then((_) {
             // ReviewWritingPage에서 돌아왔을 때 리스트를 뒤집음
             setState(() {
-              reviews = reviews.reversed.toList();
+              //reviews = reviews.reversed.toList();
             });
           });
         },

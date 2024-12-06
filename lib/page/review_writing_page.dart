@@ -33,6 +33,7 @@ class _ReviewWritingPageState extends State<ReviewWritingPage> {
   // 모델별 색상 데이터 정의
   final Map<String, List<String>> colorData = {
     '캐스퍼': ['언블리치드 아이보리', '아틀라스 화이트', '비자림 카키 매트', '톰보이 카키'],
+    'E-Class': ['블랙', '폴라 화이트', '베르데 실버', '옵시디안 블랙', '노틱 블루', '벨벳 브라운', '그라파이트 그레이', '하이-테크 그레이'],
   };
 
   // 카메라 촬영 또는 앨범에서 이미지 선택
@@ -66,11 +67,11 @@ class _ReviewWritingPageState extends State<ReviewWritingPage> {
     required String text,
     required String user,
     required List<File> images, // 업로드할 이미지 파일 리스트
-    required String date, // 작성 날짜
+    //required String date, // 작성 날짜
   }) async {
     try {
       // Firestore 컬렉션의 경로
-      String collectionPath = 'cars/hyundai_casper/reviews'; // 현대 캐스퍼 데이터 입력(임의)
+      String collectionPath = 'cars/benz_e-class/reviews'; // 벤츠 e-클래스 데이터 입력(임의)
 
       // Firestore에 문서 추가 (리뷰 데이터)
       final docRef = await FirebaseFirestore.instance.collection(collectionPath).add({
@@ -79,12 +80,12 @@ class _ReviewWritingPageState extends State<ReviewWritingPage> {
         'rating': rating.toString(),
         'text': text,
         'user': user,
-        'date': date,
+        'date': FieldValue.serverTimestamp(), // Firestore 서버의 타임스탬프
         'wish': false, // 기본 값
         // 임의의 이미지 데이터
-        'imageUrl_1': "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/BB1p8YOW.img?w=386&h=257&m=6",
-        'imageUrl_2': "https://cdn.motorgraph.com/news/photo/202406/40469_201416_5232.jpg",
-        'imageUrl_3': "https://contents-cdn.viewus.co.kr/image/2024/06/CP-2023-0047/image-f74d4f2c-8ee4-4373-9a69-7d8baedfb942.jpeg",
+        'imageUrl_1': "https://mblogthumb-phinf.pstatic.net/MjAyNDAxMjBfMjcx/MDAxNzA1NzQzNzM1OTAy.hcONK4FW_ANUSq_BR-3F9T4LL-TKMsUb5f9SEYRnVQgg.Q9KydZIU2YjfuTXAWi3GxyS2rNNfKQyhIn5KdT4GDdMg.JPEG.werty-uiop6233-/1705743735022.jpg?type=w800",
+        'imageUrl_2': "https://image.zdnet.co.kr/2024/02/07/44d6b3ac7322dcae38ab6b5b409c6a70.png",
+        'imageUrl_3': "https://www.motoya.co.kr/news/photo/202402/39763_236496_3023.jpg",
       });
       print('데이터를 성공적으로 업로드했습니다.');
     } catch (e) {
@@ -309,7 +310,7 @@ class _ReviewWritingPageState extends State<ReviewWritingPage> {
                   text: reviewText, // 리뷰 내용
                   user: "user1234", // 사용자 이름
                   images: _selectedImages, // 선택된 이미지 리스트
-                  date: getTodayDate(), // 오늘 날짜 자동 입력
+                  // date: getTodayDate(), // 오늘 날짜 자동 입력
                 );
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('리뷰가 성공적으로 업로드되었습니다!')),
