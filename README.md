@@ -1,4 +1,4 @@
-![모토픽-발표자료-002 (1)](https://github.com/user-attachments/assets/d8ca5a01-35d3-4d73-bce7-4d8719ff31ab)
+![모토픽-발표자료-002 (1)](https://github.com/user-attachments/assets/715dc003-32a8-48b9-a2c2-47a6106883fe)
 # 차량 인식 및 정보 제공 앱 개발
 
 ## 🖥️프로젝트 소개
