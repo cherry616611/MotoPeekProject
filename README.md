@@ -1,3 +1,4 @@
+![모토픽-발표자료-002 (1)](https://github.com/user-attachments/assets/d8ca5a01-35d3-4d73-bce7-4d8719ff31ab)
 # 차량 인식 및 정보 제공 앱 개발
 
 ## 🖥️프로젝트 소개
@@ -15,6 +16,9 @@
 - Dart
 - Google Cloud Platform(GCP) API
 - Firebase
+
+## 🧑‍🤝‍🧑팀 구성
+1명(프로젝트 기획 및 개발 담당)
 
 ## 📌주요 기능
 - **차량 이미지 인식기능:** 스마트폰 카메라를 사용하여 차량을 촬영하면, 모델 및 제조사를 자동으로 식별합니다.
